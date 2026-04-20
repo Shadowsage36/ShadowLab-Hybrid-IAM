@@ -59,7 +59,7 @@ My design assumes the use of **Enterprise Password Managers (EPM)**. By pairing 
 ### Troubleshooting: Identity Sync Remediation
 ![Okta Sync Conflict](Screenshots/Otka%20error.png)
 ![Okta Sync Resolution](Screenshots/Otka%20user%20fix.png)
-*Figure 3 & 4: Demonstrating the identification and resolution of a synchronization mismatch, resulting in 25 verified users successfully synced from AD to Okta.*
+*Figure 3 & 4: Demonstrating the identification and resolution of a synchronization mismatch.*
 
 ### Active Directory Group Push
 ![Okta Groups](Screenshots/Otka%20Groups.png)
