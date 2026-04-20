@@ -1,37 +1,54 @@
-# ShadowLab-Hybrid-IAM
-A production-ready Hybrid IAM environment featuring automated AD provisioning, Entra ID synchronization, and security hardening
-# ShadowLab: Hybrid IAM & Enterprise Identity Architecture
-
-##  Overview
-ShadowLab is a "Company-in-a-Box" infrastructure project designed to demonstrate advanced **Identity and Access Management (IAM)**. This project simulates a professional greenfield deployment, bridging on-premises Active Directory with **Microsoft Entra ID** to create a secure, scalable, and automated hybrid identity perimeter.
-
-##  Core Technology Stack
-* **Identity:** Windows Server 2022 (Active Directory Domain Services)
-* **Cloud:** Microsoft Entra ID (Hybrid Sync via Entra Connect)
-* **Automation:** PowerShell (Identity Lifecycle Management)
-* **Security:** TLS 1.2 Enforcement, Password Hash Synchronization (PHS)
-* **Management:** Azure Arc (Cloud-to-On-Prem visibility)
-
-##  Architectural Design Decisions
-
-### 1. Identity as the Perimeter
-Instead of focusing on traditional networking (VLANs/Routing), this project treats **Identity** as the primary security boundary. 
-* **Hardened Baseline:** Manually provisioned Windows Server 2022 with **TLS 1.2 enforced** to ensure secure transport for the Entra Connect agent.
-* **Attribute Enrichment:** Users were provisioned via PowerShell with full metadata (Department, Manager, Job Title) to support **Attribute-Based Access Control (ABAC)**.
-
-### 2. Automated Lifecycle Management
-Leveraging my professional background in **MECM/SCCM and PXE deployment**, I architected the directory to be "deployment-ready":
-* **User-Device Affinity:** Designed logic to link primary users to specific machine groups, mimicking a production zero-touch imaging environment.
-* **Dynamic Group Membership:** Structured OUs and Security Groups to automatically trigger GPOs and software deployments based on department.
-
-### 3. Hybrid Synchronization & Remediation
-* **Security:** Implemented **Password Hash Sync** to enable leaked credential detection in the cloud.
-* **Troubleshooting:** Documented and validated remediation paths for **UPN synchronization conflicts**, utilizing "Hard-Match" techniques to resolve identity collisions between AD and Entra ID.
-
-##  Project Contents
-* `/Scripts`: PowerShell automation for bulk user/group creation.
-* `/Documentation`: Step-by-step logic for Entra ID configuration.
-* `/Screenshots`: Evidence of successful Hybrid Sync and Identity verification.
+# 🛡️ ShadowLab: Hybrid Identity & Access Management (IAM)
+**An Enterprise-Grade Identity Perimeter bridging On-Premises AD, Okta, and Microsoft Entra ID.**
 
 ---
-*Developed by ShadowSage36 — Focused on modernizing enterprise identity and bridging the gap between legacy infrastructure and the cloud.*
+
+## 🏗️ 01. The Architecture
+ShadowLab is a "Company-in-a-Box" project designed to demonstrate advanced **Identity Lifecycle Management**. This project simulates a professional greenfield deployment, treating **Identity as the primary security boundary.**
+
+* **Source of Truth:** Windows Server 2022 (Active Directory DS)
+* **Identity Provider (IdP):** Okta (SAML/SSO Integration)
+* **Governance Layer:** SailPoint IdentityIQ
+* **Cloud Bridge:** Microsoft Entra ID (Hybrid Sync via Entra Connect)
+
+---
+
+## 🔒 02. Security Hardening (GPO Baseline)
+A major focus of this project was enforcing a NIST-aligned security posture while navigating platform-specific constraints.
+
+### The "Grey-Box" Challenge & Resolution
+During the hardening phase, I encountered the standard Windows limitation where **Account Policies** are non-editable at the Organizational Unit (OU) level. 
+* **The Fix:** I modified the **Default Domain Policy** at the root to ensure the Security Accounts Manager (SAM) properly enforced complexity and lockout rules across the entire forest.
+
+### Implemented Policies:
+| Setting | Configuration | Logic |
+| :--- | :--- | :--- |
+| **Min. Password Length** | 12 Characters | Balanced entropy vs. user friction. |
+| **Account Lockout** | 5 Attempts / 30 Mins | Mitigation of brute-force dictionary attacks. |
+| **Interactive Logons** | Denied for Svc Accts | Preventing lateral movement of privileged credentials. |
+
+---
+
+## ⚙️ 03. Identity Lifecycle Automation
+Leveraging **PowerShell**, I automated the "Day 1" provisioning process to ensure data integrity for downstream systems (Okta/SailPoint).
+
+* **Attribute Enrichment:** Users are provisioned with full metadata (Dept, Manager, Title) to support **Attribute-Based Access Control (ABAC)**.
+* **UPN Remediation:** Documented "Hard-Match" techniques to resolve identity collisions between local AD and Entra ID.
+* **MECM Integration:** Structured OUs to support automated software deployment and User-Device Affinity (UDA).
+
+---
+
+## 🧠 04. Engineering Philosophy
+> *"A 14-character password policy is only effective if the user doesn't write it on a sticky note."*
+
+My design assumes the use of **Enterprise Password Managers (EPM)**. By pairing 12-character passwords with **Okta MFA**, ShadowLab achieves a high security posture without overwhelming the Help Desk with password reset tickets.
+
+---
+
+## 📸 05. Evidence & Documentation
+* **[Folder: /Screenshots]** - AD structures, GPO results, and Okta Sync proof.
+* **[Folder: /Scripts]** - PowerShell automation used for bulk provisioning.
+* **[Folder: /Policies]** - Exported GPO reports.
+
+---
+**Developed by ShadowSage36** *Modernizing Enterprise Identity from the Ground Up.*
