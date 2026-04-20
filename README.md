@@ -44,11 +44,28 @@ Leveraging **PowerShell**, I automated the "Day 1" provisioning process to ensur
 My design assumes the use of **Enterprise Password Managers (EPM)**. By pairing 12-character passwords with **Okta MFA**, ShadowLab achieves a high security posture without overwhelming the Help Desk with password reset tickets.
 
 ---
+---
 
 ## 📸 05. Evidence & Documentation
-* **[Folder: /Screenshots]** - AD structures, GPO results, and Okta Sync proof.
-* **[Folder: /Scripts]** - PowerShell automation used for bulk provisioning.
-* **[Folder: /Policies]** - Exported GPO reports.
+
+### Identity Federation & SSO Dashboard
+![Okta SSO Dashboard](Screenshots/Okta%20applications%20SSO.png)
+*Figure 1: Okta integration showing SailPoint IIQ and enterprise applications configured for SAML 2.0.*
+
+### SailPoint SAML Configuration
+![SailPoint SAML 2.0](Screenshots/Sailpoint%20SAML%202.0.png)
+*Figure 2: Federation metadata and ACS configuration for the SailPoint identity governance layer.*
+
+### Troubleshooting: Identity Sync Remediation
+![Okta Sync Conflict](Screenshots/Otka%20error.png)
+![Okta Sync Resolution](Screenshots/Otka%20user%20fix.png)
+*Figure 3 & 4: Demonstrating the identification and resolution of a synchronization mismatch, resulting in 25 verified users successfully synced from AD to Okta.*
+
+### Active Directory Group Push
+![Okta Groups](Screenshots/Otka%20Groups.png)
+*Figure 5: Successful mapping of On-Premises Security Groups to Okta Cloud Groups.*
+
+---
 
 ---
 **Developed by ShadowSage36** *Modernizing Enterprise Identity from the Ground Up.*
