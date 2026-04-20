@@ -13,24 +13,26 @@ ShadowLab is a "Company-in-a-Box" project designed to demonstrate advanced **Ide
 
 ---
 
-## 🔒 02. Security Hardening (GPO Baseline)
-A major focus of this project was enforcing a NIST-aligned security posture while navigating platform-specific constraints.
+## 🔒 02. Security Hardening & GPO Baselines
+A major focus of this project was enforcing a NIST-aligned security posture. Beyond standard configurations, I implemented specific Group Policy Objects (GPOs) to protect the "Tier 0" infrastructure.
 
 ### The "Grey-Box" Challenge & Resolution
-During the hardening phase, I encountered the standard Windows limitation where **Account Policies** are non-editable at the Organizational Unit (OU) level. 
-* **The Fix:** I modified the **Default Domain Policy** at the root to ensure the Security Accounts Manager (SAM) properly enforced complexity and lockout rules across the entire forest.
+During the hardening phase, I addressed the standard Windows limitation where **Account Policies** (Password/Lockout) are non-editable at the Organizational Unit (OU) level. 
+* **The Fix:** I modified the **Default Domain Policy** at the root to ensure the Security Accounts Manager (SAM) properly enforced complexity and lockout rules globally.
 
-### Implemented Policies:
-| Setting | Configuration | Logic |
+### Security Policy Breakdown:
+| Policy Area | Setting | Logic / Defense Strategy |
 | :--- | :--- | :--- |
-| **Min. Password Length** | 12 Characters | Balanced entropy vs. user friction. |
-| **Account Lockout** | 5 Attempts / 30 Mins | Mitigation of brute-force dictionary attacks. |
-| **Interactive Logons** | Denied for Svc Accts | Preventing lateral movement of privileged credentials. |
+| **Password Complexity** | 12 Characters | Balanced entropy vs. user friction; supports EPM usage. |
+| **Account Lockout** | 5 Attempts / 30 Mins | Thwarts automated brute-force and dictionary attacks. |
+| **User Rights** | Deny Local Logon | Applied to Service Accounts to prevent credential harvesting. |
+| **Audit Policy** | Logon/Logoff Events | Configured success/failure logging for SIEM ingestion. |
+| **Lateral Movement** | Restrict RDP Access | Limits administrative surface area to specific jump boxes. |
 
 ---
 
 ## ⚙️ 03. Identity Lifecycle Automation
-Leveraging **PowerShell**, I automated the "Day 1" provisioning process to ensure data integrity for downstream systems (Okta/SailPoint).
+Leveraging [PowerShell](Scripts/Provision-ShadowLab.ps1), I automated the "Day 1" provisioning process to ensure data integrity for downstream systems (Okta/SailPoint).
 
 * **Attribute Enrichment:** Users are provisioned with full metadata (Dept, Manager, Title) to support **Attribute-Based Access Control (ABAC)**.
 * **UPN Remediation:** Documented "Hard-Match" techniques to resolve identity collisions between local AD and Entra ID.
@@ -43,7 +45,6 @@ Leveraging **PowerShell**, I automated the "Day 1" provisioning process to ensur
 
 My design assumes the use of **Enterprise Password Managers (EPM)**. By pairing 12-character passwords with **Okta MFA**, ShadowLab achieves a high security posture without overwhelming the Help Desk with password reset tickets.
 
----
 ---
 
 ## 📸 05. Evidence & Documentation
@@ -67,5 +68,4 @@ My design assumes the use of **Enterprise Password Managers (EPM)**. By pairing 
 
 ---
 
----
 **Developed by ShadowSage36** *Modernizing Enterprise Identity from the Ground Up.*
